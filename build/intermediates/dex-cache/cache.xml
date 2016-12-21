@@ -7,7 +7,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="d59d9cb0f1795184aa7175c8533bbb2ff53cdfd0">
+        sha1="dd535622c759c4ac1c50f7b35f1ec222763feff6">
         <dex dex="/home/jussi/StudioProjects/Tyokohtainenriskinarviointi/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_59f536418c40800c62ff7d126eab69ef01f08ad8/classes.dex" />
     </item>
     <item
@@ -97,7 +97,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
-        sha1="cb1083b72d1800bd654a9cc43fe5c1bdb05f199d">
+        sha1="0f631b5a54968e4bc3b8dcf9448f8dd33f4e683a">
         <dex dex="/home/jussi/StudioProjects/Tyokohtainenriskinarviointi/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_371f20d4a3bd4126a2c1313ada0aa229b0b7c480/classes.dex" />
     </item>
     <item

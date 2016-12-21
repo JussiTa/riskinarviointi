@@ -4,10 +4,12 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,9 @@ public class FormActivity extends AppCompatActivity {
 
         TextView tw = (TextView) findViewById(R.id.text1);
         tw.setText("BOTNIA MILL SERVICE");
+
+        EditText et = (EditText) findViewById(R.id.inputText);
+        et.setText("Työkohde");
 
 
 
@@ -119,10 +124,52 @@ public class FormActivity extends AppCompatActivity {
 
 
 
+        TextView tw30 = (TextView) findViewById(R.id.text30);
+        tw30.setText("Tarvittavat henkilösuojaimet");
+        tw30.setTypeface(null, Typeface.BOLD);
+        TextView tw31  = (TextView) findViewById(R.id.text31);
+        tw31.setText(" turvakengät / -saappaat");
+        TextView tw32  = (TextView) findViewById(R.id.text32);
+        tw32.setText(" kypärä");
+        TextView tw33  = (TextView) findViewById(R.id.text33);
+        tw33.setText(" suojalasit");
+        TextView tw34  = (TextView) findViewById(R.id.text34);
+        tw34.setText(" kuulsuojaimet");
+        TextView tw35  = (TextView) findViewById(R.id.text35);
+        tw35.setText(" kasvosuoja (visiiri)");
+
+        TextView tw36  = (TextView) findViewById(R.id.text36);
+        tw36.setText(" hengityssuoja");
+        TextView tw37  = (TextView) findViewById(R.id.text37);
+        tw37.setText(" suojakäsineet");
+        TextView tw38  = (TextView) findViewById(R.id.text38);
+        tw38.setText(" turvavaljaat");
+        TextView tw39  = (TextView) findViewById(R.id.text39);
+        tw39.setText(" kemikaalisuojavaatetus");
+        TextView tw40  = (TextView) findViewById(R.id.text40);
+        tw40.setText(" paineilmalaitteet");
+        TextView tw41  = (TextView) findViewById(R.id.text41);
+        tw41.setText(" huomioliivi");
 
 
 
-          //View tw6 = (TextView) findViewById(R.id.text6);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //View tw6 = (TextView) findViewById(R.id.text6);
        // tw6.setText("Ei aiheuta \n vaaraa");
 
 

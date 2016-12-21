@@ -23,7 +23,7 @@
     <style name="Header" parent="@android:style/TextAppearance.DeviceDefault.Small">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:textColor">#3F51B5</item>
+        <item name="android:textColor">#3F51B9</item>
         <item name="android:typeface">monospace</item>
         <item name="android:textSize">12sp</item>id
 
@@ -37,6 +37,20 @@
         <item name="android:textSize">10sp</item>id
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:background">#3F51B5</item>
+
+    </style>
+
+
+
+
+    <style name="TextInput" parent="@android:style/TextAppearance.WindowTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:typeface">monospace</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:editTextColor">#3F51B5</item>
+
+
 
     </style>
 
