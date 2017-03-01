@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,7 +10,11 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     tools:context="com.example.jussi.tyokohtainenriskinarviointi.FormActivity">
 
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
     <!-- Logo -->
     <TextView
         android:id="@+id/text1"
@@ -27,6 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="20dp"
+
         style="@style/TextInput"/>
 
     <!-- Tumma otsikko -->
@@ -192,51 +197,62 @@
 
      <TextView
          android:id="@+id/text30"
-         style="@style/Header4"/>
+         style="@style/Header4"
+         android:paddingBottom="4dp"/>
 
      <TextView
          android:id="@+id/text31"
-         style="@style/Header5" />
+         style="@style/Header5"
+         android:paddingBottom="4dp"/>
 
      <TextView
          android:id="@+id/text32"
-         style="@style/Header5" />
+         style="@style/Header5"
+         android:paddingBottom="4dp"/>
 
      <TextView
          android:id="@+id/text33"
-         style="@style/Header5" />
+         style="@style/Header5"
+         android:paddingBottom="4dp"/>
 
      <TextView
          android:id="@+id/text34"
-         style="@style/Header5" />
+         style="@style/Header5"
+         android:paddingBottom="4dp"/>
 
      <TextView
          android:id="@+id/text35"
-         style="@style/Header5" />
+         style="@style/Header5"
+         android:paddingBottom="4dp"/>
 
      <TextView
          android:id="@+id/text36"
-         style="@style/Header5" />
+         style="@style/Header5"
+         android:paddingBottom="4dp"/>
 
      <TextView
          android:id="@+id/text37"
-         style="@style/Header5" />
+         style="@style/Header5"
+         android:paddingBottom="4dp"/>
 
      <TextView
          android:id="@+id/text38"
-         style="@style/Header5" />
+         style="@style/Header5"
+         android:paddingBottom="4dp"/>
 
      <TextView
          android:id="@+id/text39"
-         style="@style/Header5" />
+         style="@style/Header5"
+         android:paddingBottom="4dp"/>
 
      <TextView
          android:id="@+id/text40"
-         style="@style/Header5" />
+         style="@style/Header5"
+         android:paddingBottom="4dp"/>
 
      <TextView
          android:id="@+id/text41"
-         style="@style/Header5" />
+         style="@style/Header4" />
  </LinearLayout>
 
 
@@ -347,6 +363,8 @@
 
     </LinearLayout>
 
+    <!-- Vasemmat alaruudut-->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -385,7 +403,7 @@
             android:onClick="onCheckboxClicked" />
     </LinearLayout>
 
-    <!--Oikea alavalintaruudut -->
+    <!-- Oikea alavalintaruudut -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -451,10 +469,27 @@
             android:onClick="onCheckboxClicked" />
 
     </LinearLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="570dp">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:id="@+id/button"
+        android:text="Lähetä"
+        android:onClick="sendForm"
+        />
+        </RelativeLayout>
+
+
+
+
 
 
 </RelativeLayout>
 
 
 
-
+</ScrollView>

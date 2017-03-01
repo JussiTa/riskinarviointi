@@ -1,5 +1,6 @@
 package com.example.jussi.tyokohtainenriskinarviointi;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,22 +8,52 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.view.textservice.TextInfo;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
 public class FormActivity extends AppCompatActivity {
+
+
+    private  boolean[] valintarivi1= new boolean[8];
+    private  boolean[] valintarivi2 = new boolean[8];
+    private  boolean[] valintarivi3 = new boolean[6];
+    private  boolean[] valintarivi4 = new boolean[11];
+
+    private int tyhjä1 =0;
+    private int tyhjä2 =0;
+    private int tyhjä3 =0;
+    private boolean molemmatPohjassa =false;
+    private String mEmail;
+    private String tehtava;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle bundle = getIntent().getExtras();
+        mEmail =bundle.getString("email");
         setContentView(R.layout.activity_form);
   Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
 
         TextView tw = (TextView) findViewById(R.id.text1);
@@ -30,6 +61,8 @@ public class FormActivity extends AppCompatActivity {
 
         EditText et = (EditText) findViewById(R.id.inputText);
         et.setText("Työkohde");
+        tehtava= et.getText().toString();
+
 
 
 
@@ -38,7 +71,7 @@ public class FormActivity extends AppCompatActivity {
         tw1.setText("OSA D- TYÖNTEKIJÄN TARKISTUSLISTA");
 
         TextView tw3 = (TextView) findViewById(R.id.text3);
-        tw3.setText("TUNNISTA VAARA-ARVI SEURAUKSET-POISTA RISKI-VÄHENNÄ-SUOJAUDU");
+        tw3.setText("TUNNISTA VAARA-ARVIO SEURAUKSET-POISTA RISKI-VÄHENNÄ-SUOJAUDU");
 
         TextView tw4 = (TextView) findViewById(R.id.text4);
         tw4.setText("VAARJEN TUNNISTAMINEN KOHTEESSA ");
@@ -151,79 +184,627 @@ public class FormActivity extends AppCompatActivity {
         TextView tw41  = (TextView) findViewById(R.id.text41);
         tw41.setText(" huomioliivi");
 
+          Button button = (Button)
+          findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sendForm();
+            }
+        });
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //View tw6 = (TextView) findViewById(R.id.text6);
-       // tw6.setText("Ei aiheuta \n vaaraa");
-
-
-
-        final CheckBox checkBox = (CheckBox) findViewById(R.id.checkbox_turva1);
-       // checkBox.setText("rrrrrrrrrrrrrrr");
-
-
-
-        if (checkBox.isChecked()) {
-            checkBox.setChecked(false);
-            
-        }
-
-        final CheckBox checkBox2 = (CheckBox) findViewById(R.id.checkbox_turva2);
-        //checkBox2.setText("yyyyyyyyyyyyyyyyyyy");
-
-        if (checkBox2.isChecked()) {
-            checkBox2.setChecked(false);
-
-        }
-
-
-        final CheckBox checkBox3 = (CheckBox) findViewById(R.id.checkbox_turva3);
-        //checkBox2.setText("yyyyyyyyyyyyyyyyyyy");
-
-        if (checkBox3.isChecked()) {
-            checkBox3.setChecked(false);
-
-        }
-
-        final CheckBox checkBox4 = (CheckBox) findViewById(R.id.checkbox_turva4);
-        //checkBox2.setText("yyyyyyyyyyyyyyyyyyy");
-
-        if (checkBox4.isChecked()) {
-            checkBox4.setChecked(false);
-
-        }
-
+        TextInfo ti = new TextInfo("Valitse jompi kumpi");
+         findViewById(R.id.info);
 
     }
-
-
+        //Tässä metodissa tarkistetaan valintaruudut
     public void onCheckboxClicked(View view) {
+        Toast toast = Toast.makeText(getBaseContext(),"Valitse jompi kumpi",Toast.LENGTH_SHORT);
         // Is the view now checked?
         //   boolean checked = checkBox.isChecked();
+        int id = view.getId();
+        Log.d("ID", "luku on  "+id);
         boolean checked = ((CheckBox) view).isChecked();
 
-        Toast.makeText(this, "painettu", Toast.LENGTH_SHORT).show();
+        switch (view.getId()){
+                //Katsotaan läpi ensiksi vasen valintaruuturivi
+            case (R.id.checkbox_turva1):
+                if(checked) {
+                    if (valintarivi2[0]) {
+                        toast.show();
+                        molemmatPohjassa=true;
+                        valintarivi1[0]=true;
+                    }
+                    else{
+                        valintarivi1[0] = true;
+                        molemmatPohjassa=false;
+                    }
+                }
+                else {
+                    valintarivi1[0] = false;
+                    molemmatPohjassa=false;
+                }
+
+                break;
+
+            case (R.id.checkbox_turva2):
+                if(checked) {
+                    if (valintarivi2[1]) {
+                        toast.show();
+                        molemmatPohjassa=true;
+                        valintarivi1[1]=true;
+                    }
+                    else {
+                        valintarivi1[1] = true;
+                        molemmatPohjassa=false;
+                    }
+                }
+                else {
+                    valintarivi1[1] = false;
+                    molemmatPohjassa=false;
+                }
+                break;
+
+            case (R.id.checkbox_turva3):
+                if(checked) {
+                    if (valintarivi2[2]){
+                        toast.show();
+                        valintarivi1[2]=true;
+                        molemmatPohjassa=true;
+                    }
+                    else {
+                        valintarivi1[2] = true;
+                        molemmatPohjassa=false;
+                    }
+                }
+                else {
+                    valintarivi1[2] = false;
+                    molemmatPohjassa=false;
+                }
+                break;
+
+
+            case (R.id.checkbox_turva4):
+                if(checked) {
+                    if(valintarivi2[3]){
+                        toast.show();
+                        valintarivi1[3]=true;
+                        molemmatPohjassa=true;
+                    }
+                    else{
+                            valintarivi1[3] = true;
+                            molemmatPohjassa =false;
+                    }
+                }
+                else {
+                    valintarivi1[3] = false;
+
+                    molemmatPohjassa=false;
+                }
+                    break;
 
 
 
-        //  final CheckBox checkBox2 = (CheckBox) findViewById(R.id.checkbox_turva2);
+            case (R.id.checkbox_turva5):
+                if(checked) {
+                    if (valintarivi2[4]) {
+                        toast.show();
+                        valintarivi1[4]=true;
+                        molemmatPohjassa=true;
+                    }
+                    else {
+                        valintarivi1[4] = true;
+                        molemmatPohjassa=false;
+                    }
+                }
+                else {
+                    valintarivi1[4] = false;
+                    molemmatPohjassa=false;
+                }
+                break;
 
+            case (R.id.checkbox_turva6):
+                if(checked) {
+                    if (valintarivi2[5]){
+                        toast.show();
+                        molemmatPohjassa=true;
+                        valintarivi1[5]=true;
+                    }
+
+                    else {
+                        valintarivi1[5] = true;
+                        molemmatPohjassa = false;
+                    }
+                }
+                else {
+                    valintarivi1[5] = false;
+                    molemmatPohjassa=false;
+                }
+                break;
+
+            case (R.id.checkbox_turva7):
+                if(checked) {
+                    if (valintarivi2[6]) {
+                        toast.show();
+                        molemmatPohjassa=true;
+                        valintarivi1[6]=true;
+                    }
+                    else{
+                        valintarivi1[6] = true;
+                        molemmatPohjassa=false;
+                    }
+                }
+                else{
+                    valintarivi1[6]=false;
+                    molemmatPohjassa=false;
+                }
+                break;
+
+            case (R.id.checkbox_turva8):
+                if(checked) {
+                    if (valintarivi2[7])
+                        toast.show();
+                    else valintarivi1[7] = true;
+                }
+                else {
+                    valintarivi1[7] = false;
+                    molemmatPohjassa=false;
+                }
+
+                break;
+
+
+                //Tässä tarkastetaan oikea valintarivi
+
+            case (R.id.checkbox_turva9):
+
+                if(checked) {
+                    if (valintarivi1[0]) {
+                        toast.show();
+                        molemmatPohjassa=true;
+                        valintarivi2[0]=true;
+                    }
+                    else {
+                        valintarivi2[0] = true;
+                        molemmatPohjassa=false;
+                    }
+
+                    }
+                else {
+                    valintarivi2[0] = false;
+                    molemmatPohjassa=false;
+                }
+                break;
+
+            case (R.id.checkbox_turva10):
+
+                if(checked) {
+                    if (valintarivi1[1]) {
+                        toast.show();
+                        molemmatPohjassa=true;
+                        valintarivi2[1]=true;
+                    }
+                    else {
+                        valintarivi2[1] = true;
+                        molemmatPohjassa=false;
+                    }
+                    }
+                else {
+                    valintarivi2[1] = false;
+                    molemmatPohjassa=false;
+                }
+                break;
+
+            case (R.id.checkbox_turva11):
+
+                if(checked) {
+                    if(valintarivi1[2]){
+                        toast.show();
+                        molemmatPohjassa = true;
+                        valintarivi2[2]=true;
+                    }
+                        else {
+                            valintarivi2[2] = true;
+                            molemmatPohjassa=false;
+                        }
+                    }
+                else {
+                    valintarivi2[2] = false;
+                    molemmatPohjassa=false;
+                }
+                break;
+
+            case (R.id.checkbox_turva12):
+
+                if(checked) {
+                    if (valintarivi1[3]) {
+                        toast.show();
+                        valintarivi2[3]=true;
+                        molemmatPohjassa=true;
+                    }
+                    else {
+                        valintarivi2[3] = true;
+                        molemmatPohjassa=false;
+                    }
+                }
+                else {
+
+                    valintarivi2[3] = false;
+                    molemmatPohjassa=false;
+                }
+                break;
+
+            case (R.id.checkbox_turva13):
+
+                if(checked) {
+                    if (valintarivi1[4]) {
+                        toast.show();
+                        valintarivi2[4]=true;
+                        molemmatPohjassa=true;
+                    }
+                    else {
+                        valintarivi2[4] = true;
+                        molemmatPohjassa=false;
+                        }
+                    }
+
+
+                else {
+                    valintarivi2[4] = false;
+                    molemmatPohjassa=false;
+                    }
+                break;
+
+            case (R.id.checkbox_turva14):
+
+                if(checked) {
+                    if (valintarivi1[5]) {
+                        toast.show();
+                        valintarivi2[5]=true;
+                        molemmatPohjassa=true;
+                    }
+                    else {
+                        valintarivi2[5] = true;
+                        molemmatPohjassa=false;
+                    }
+                }
+                else {
+                    valintarivi2[5] = false;
+                    molemmatPohjassa=false;
+                }
+                break;
+
+            case (R.id.checkbox_turva15):
+
+                if(checked) {
+                    if (valintarivi1[6]) {
+                        toast.show();
+                        valintarivi2[6]=true;
+                        molemmatPohjassa=true;
+                    }
+                    else {
+                        valintarivi2[6] = true;
+                        molemmatPohjassa=false;
+                    }
+                }
+                else {
+                    valintarivi2[6] = false;
+                    molemmatPohjassa=false;
+                }
+                break;
+
+            case (R.id.checkbox_turva16):
+
+                if(checked) {
+                    if (valintarivi1[7]){
+                        toast.show();
+                        valintarivi2[7]=true;
+                    }
+                    else {
+                        valintarivi2[7] = true;
+                        molemmatPohjassa=false;
+                    }
+                }
+                else {
+                    valintarivi2[7] = false;
+                    molemmatPohjassa=false;
+                }
+                break;
+
+            //Vasen alarivi
+
+            case (R.id.checkbox_turva17):
+
+                if(checked)
+                    valintarivi3[0] = true;
+
+                else
+                    valintarivi3[0]=false;
+
+                break;
+            case (R.id.checkbox_turva18):
+
+                if(checked)
+                    valintarivi3[1] = true;
+
+                else
+                    valintarivi3[1]=false;
+
+                break;
+            case (R.id.checkbox_turva19):
+
+                if(checked)
+                    valintarivi3[2] = true;
+
+                else
+                    valintarivi3[2]=false;
+
+                break;
+
+            case (R.id.checkbox_turva20):
+
+                if(checked)
+                    valintarivi3[3] = true;
+
+                else
+                    valintarivi3[3]=false;
+
+                break;
+
+            case (R.id.checkbox_turva21):
+
+                if(checked)
+                    valintarivi3[4] = true;
+
+                else
+                    valintarivi3[4]=false;
+
+                break;
+
+
+            case (R.id.checkbox_turva22):
+
+                if(checked)
+                    valintarivi3[5] = true;
+
+                else
+                    valintarivi3[5]=false;
+
+                break;
+            //Oikea alarivi
+
+            case (R.id.checkbox_turva23):
+
+                if(checked)
+                    valintarivi4[0] = true;
+
+                else
+                    valintarivi4[0]=false;
+
+                break;
+
+            case (R.id.checkbox_turva24):
+
+                if(checked)
+                    valintarivi4[1] = true;
+
+                else
+                    valintarivi4[1]=false;
+
+                break;
+
+
+            case (R.id.checkbox_turva25):
+
+                if(checked)
+                    valintarivi4[2] = true;
+
+                else
+                    valintarivi4[2]=false;
+
+                break;
+
+            case (R.id.checkbox_turva26):
+
+                if(checked)
+                    valintarivi4[3] = true;
+
+                else
+                    valintarivi4[3]=false;
+
+                break;
+
+            case (R.id.checkbox_turva27):
+
+                if(checked)
+                    valintarivi4[4] = true;
+
+                else
+                    valintarivi4[4]=false;
+
+                break;
+
+            case (R.id.checkbox_turva28):
+
+                if(checked)
+                    valintarivi4[5] = true;
+
+                else
+                    valintarivi4[5]=false;
+
+                break;
+
+
+            case (R.id.checkbox_turva29):
+
+                if(checked)
+                    valintarivi4[6] = true;
+
+                else
+                    valintarivi4[6]=false;
+
+                break;
+
+            case (R.id.checkbox_turva30):
+
+                if(checked)
+                    valintarivi4[7] = true;
+
+                else
+                    valintarivi4[7]=false;
+
+                break;
+
+
+            case (R.id.checkbox_turva31):
+
+                if(checked)
+                    valintarivi4[8] = true;
+
+                else
+                    valintarivi4[8]=false;
+
+                break;
+
+            case (R.id.checkbox_turva32):
+
+                if(checked)
+                    valintarivi4[9] = true;
+
+                else
+                    valintarivi4[9]=false;
+
+                break;
+
+            case (R.id.checkbox_turva33):
+
+                if(checked)
+                    valintarivi4[10] = true;
+
+                else
+                    valintarivi4[10]=false;
+
+                break;
+
+        }
+
+
+
+        //Toast.makeText(this, "painettu", Toast.LENGTH_SHORT).show();
     }
-}
+
+      public void sendForm(){
+          Toast toast = Toast.makeText(getBaseContext(),"Tarkista kaikki kohdat!", Toast.LENGTH_SHORT);
+
+          Toast toast2 = Toast.makeText(getBaseContext(),"Lomake lähetetty!", Toast.LENGTH_SHORT);
+
+          for(int i=0; i<valintarivi1.length;i++) {
+              if (!valintarivi1[i] && !valintarivi2[i])
+                  tyhjä1++;
+          }
+
+          for(int i=0; i<valintarivi1.length;i++) {
+              if (valintarivi1[i] && valintarivi2[i])
+                  tyhjä1++;
+          }
+
+
+          for(int i=0; i<valintarivi3.length;i++) {
+              if (!valintarivi3[i])
+                  tyhjä2++;
+          }
+
+
+
+          for(int i=0; i<valintarivi4.length;i++) {
+              if (!valintarivi4[i])
+                  tyhjä3++;
+          }
+
+
+          if(tyhjä1 >0||tyhjä2 >0||tyhjä3 >0 ||molemmatPohjassa)
+              toast.show();
+
+          else {
+              toast2.show();
+
+              tyhjä1 = 0;
+              tyhjä2 = 0;
+              tyhjä3 = 0;
+              molemmatPohjassa = false;
+              String url ="http://10.0.2.2/riskinarviointi/Form.php";
+              final Intent intent = new Intent(this,LoginActivity.class);
+
+              // Request a string response from the provided URL.
+              StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                      new Response.Listener<String>() {
+                          @Override
+                          public void onResponse(String response) {
+                              try {
+                                  JSONObject jsonObj = new JSONObject(response);
+
+                                  boolean error = jsonObj.getBoolean("error");
+                                  if(!error){
+                                      String ok;
+                                      ok= jsonObj.getString("ok");
+                                      //Redirect to LoginActivity
+                                      Toast toast = Toast.makeText(getApplicationContext(),ok,Toast.LENGTH_LONG);
+                                      startActivity(intent);
+                                  }
+
+                                  else{
+                                      String errorMessage;
+                                      errorMessage = jsonObj.getString("error_msg");
+                                      Toast toast = Toast.makeText(getApplicationContext(),errorMessage,Toast.LENGTH_LONG);
+
+                                  }
+
+
+                              } catch (JSONException e) {
+                                  e.printStackTrace();
+                              }
+
+
+                          }
+                      }, new Response.ErrorListener() {
+                  @Override
+                  public void onErrorResponse(VolleyError error) {
+                      //mTextView.setText("That didn't work!");
+                      Log.e("ERROR", "cANNOT SAVE USER");
+                      Toast toast = Toast.makeText(getApplicationContext(),"Rekisteröinti ei onnistunut:"+error.getMessage(),Toast.LENGTH_LONG);
+                      error.printStackTrace();
+
+                  }
+              } )
+
+              {
+
+                  @Override
+                  protected Map<String,String> getParams(){
+                      Map<String,String> params = new HashMap<String, String>();
+                      DateFormat df = DateFormat.getDateInstance();
+                      params.put("tehtava", tehtava);
+                      params.put("email", mEmail);
+                      params.put("time", df.format(Calendar.getInstance().getTime()));
+                      return params;
+                  }
+
+              };
+
+              AppController.getInstance().addToRequestQueue(stringRequest);
+
+
+          }
+
+
+
+          Intent intent = new Intent(this, FormSendedActivity.class);
+
+              startActivity(intent);
+          }
+      }
+
+
+
 
