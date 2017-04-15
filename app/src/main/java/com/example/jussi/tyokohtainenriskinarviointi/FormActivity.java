@@ -207,6 +207,7 @@ public class FormActivity extends AppCompatActivity {
         Log.d("ID", "luku on  "+id);
         boolean checked = ((CheckBox) view).isChecked();
 
+
         switch (view.getId()){
                 //Katsotaan läpi ensiksi vasen valintaruuturivi
             case (R.id.checkbox_turva1):
@@ -734,7 +735,7 @@ public class FormActivity extends AppCompatActivity {
               tyhjä3 = 0;
               molemmatPohjassa = false;
               String url ="http://10.0.2.2/riskinarviointi/Form.php";
-              final Intent intent = new Intent(this,LoginActivity.class);
+              final Intent intent = new Intent(this,FormSendedActivity.class);
 
               // Request a string response from the provided URL.
               StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -786,7 +787,6 @@ public class FormActivity extends AppCompatActivity {
                       DateFormat df = DateFormat.getDateInstance();
                       params.put("tehtava", tehtava);
                       params.put("email", mEmail);
-                      params.put("time", df.format(Calendar.getInstance().getTime()));
                       return params;
                   }
 
@@ -799,9 +799,6 @@ public class FormActivity extends AppCompatActivity {
 
 
 
-          Intent intent = new Intent(this, FormSendedActivity.class);
-
-              startActivity(intent);
           }
       }
 

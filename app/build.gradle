@@ -30,6 +30,20 @@ dependencies {
    // compile 'com.mcxiaoke.volley:library-aar:1.0.0'
 
     compile 'com.android.volley:volley:1.0.0'
+    // https://mvnrepository.com/artifact/javax.mail/mail
+  //  compile group: 'javax.mail', name: 'mail', version: '1.4.7'
 
 
+}
+
+repositories {
+    jcenter()
+    maven {
+        url "https://maven.java.net/content/groups/public/"
+    }
+}
+
+dependencies {
+    compile 'com.sun.mail:android-mail:1.5.5'
+    compile 'com.sun.mail:android-activation:1.5.5'
 }

@@ -3,6 +3,7 @@ package com.example.jussi.tyokohtainenriskinarviointi;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -46,6 +47,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,7 +85,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     SessionManager session;
-
+    boolean errors =false;
+    private String line;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +95,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
+
+        String filename= "login.txt";
+
+
+
+        try {
+            InputStream instream = openFileInput(filename);
+            InputStreamReader inputreader = new InputStreamReader(instream);
+            BufferedReader buffreader = new BufferedReader(inputreader);
+            String line;
+            while (( line = buffreader.readLine()) != null) {
+
+            }
+            instream.close();
+        } catch (java.io.FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -121,6 +151,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         registerLink.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                session.logout();
                 startRegisterActivity();
 
             }
@@ -313,7 +344,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
-        private boolean errors;
+
         private String errorMessage;
 
 
@@ -326,7 +357,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void ... params) {
 
-            String url ="http://192.168.1.113/riskinarviointi/login.php";
+            String url ="https://botniamillservice.000webhostapp.com/login.php";
 
 
             // Request a string response from the provided URL.
@@ -340,16 +371,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                         boolean error = jsonObj.getBoolean("error");
                         if(!error) {
+                            errors=true;
                             session.createLoginSession(mEmail, "Riskinarviointi");
-                            errors=error;
+
                         }
 
-                        else
+                        else {
+
                             errorMessage = jsonObj.getString("error_msg");
-                            Log.e("error",errorMessage);
-                             mPasswordView.setError(errorMessage);
-                             mPasswordView.requestFocus();
-                        //Toast toast = Toast.makeText(getApplicationContext(),errorMessage,Toast.LENGTH_LONG);
+                            Log.e("error", errorMessage);
+                            mPasswordView.setError(errorMessage);
+                            mPasswordView.requestFocus();
+                        }
+                            //Toast toast = Toast.makeText(getApplicationContext(),errorMessage,Toast.LENGTH_LONG);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -407,15 +441,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
     }
-
-
+    /*
     @Override
     public void onDestroy(){
         session.logout();
 
     }
 
-
+*/
 
 
 
