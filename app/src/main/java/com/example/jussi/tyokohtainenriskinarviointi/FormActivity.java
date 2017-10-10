@@ -45,12 +45,15 @@ public class FormActivity extends AppCompatActivity {
     private boolean molemmatPohjassa =false;
     private String mEmail;
     private String tehtava;
+    private EditText et;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
-        mEmail =bundle.getString("email");
+       // mEmail =bundle.getString("email");
+        mEmail="jussi.isokangas@gmail.com";
+
         setContentView(R.layout.activity_form);
   Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,9 +62,9 @@ public class FormActivity extends AppCompatActivity {
         TextView tw = (TextView) findViewById(R.id.text1);
         tw.setText("BOTNIA MILL SERVICE");
 
-        EditText et = (EditText) findViewById(R.id.inputText);
+         et = (EditText) findViewById(R.id.inputText);
         et.setText("Työkohde");
-        tehtava= et.getText().toString();
+       
 
 
 
@@ -188,7 +191,12 @@ public class FormActivity extends AppCompatActivity {
           findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                tehtava= et.getText().toString();
+                Log.i("TEHTAVA", tehtava);
                 sendForm();
+
+
+
             }
         });
 
@@ -580,6 +588,7 @@ public class FormActivity extends AppCompatActivity {
                 if(checked)
                     valintarivi4[0] = true;
 
+
                 else
                     valintarivi4[0]=false;
 
@@ -695,112 +704,110 @@ public class FormActivity extends AppCompatActivity {
         //Toast.makeText(this, "painettu", Toast.LENGTH_SHORT).show();
     }
 
-      public void sendForm(){
+      private void sendForm(){
+
           Toast toast = Toast.makeText(getBaseContext(),"Tarkista kaikki kohdat!", Toast.LENGTH_SHORT);
 
-          Toast toast2 = Toast.makeText(getBaseContext(),"Lomake lähetetty!", Toast.LENGTH_SHORT);
-
-          for(int i=0; i<valintarivi1.length;i++) {
-              if (!valintarivi1[i] && !valintarivi2[i])
-                  tyhjä1++;
-          }
-
-          for(int i=0; i<valintarivi1.length;i++) {
-              if (valintarivi1[i] && valintarivi2[i])
-                  tyhjä1++;
-          }
-
-
-          for(int i=0; i<valintarivi3.length;i++) {
-              if (!valintarivi3[i])
-                  tyhjä2++;
-          }
-
-
-
-          for(int i=0; i<valintarivi4.length;i++) {
-              if (!valintarivi4[i])
-                  tyhjä3++;
-          }
-
-
-          if(tyhjä1 >0||tyhjä2 >0||tyhjä3 >0 ||molemmatPohjassa)
+          if(tehtava==null)
               toast.show();
 
           else {
-              toast2.show();
 
-              tyhjä1 = 0;
-              tyhjä2 = 0;
-              tyhjä3 = 0;
-              molemmatPohjassa = false;
-              String url ="http://10.0.2.2/riskinarviointi/Form.php";
-              final Intent intent = new Intent(this,FormSendedActivity.class);
+              for (int i = 0; i < valintarivi1.length; i++) {
+                  if (!valintarivi1[i] && !valintarivi2[i])
+                      tyhjä1++;
+              }
 
-              // Request a string response from the provided URL.
-              StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                      new Response.Listener<String>() {
-                          @Override
-                          public void onResponse(String response) {
-                              try {
-                                  JSONObject jsonObj = new JSONObject(response);
 
-                                  boolean error = jsonObj.getBoolean("error");
-                                  if(!error){
-                                      String ok;
-                                      ok= jsonObj.getString("ok");
-                                      //Redirect to LoginActivity
-                                      Toast toast = Toast.makeText(getApplicationContext(),ok,Toast.LENGTH_LONG);
-                                      startActivity(intent);
+              for (int i = 0; i < valintarivi3.length; i++) {
+                  if (!valintarivi3[i])
+                      tyhjä2++;
+              }
+
+
+              for (int i = 0; i < valintarivi4.length; i++) {
+                  if (!valintarivi4[i])
+                      tyhjä3++;
+              }
+
+
+              if (tyhjä1 > 0 || tyhjä2 > 0  || molemmatPohjassa)
+                  toast.show();
+
+
+              else {
+
+
+                  tyhjä1 = 0;
+                  tyhjä2 = 0;
+                  tyhjä3 = 0;
+                  molemmatPohjassa = false;
+                  String url = "https://botniamillservice.000webhostapp.com/saveForm.php?";
+
+
+                  // Request a string response from the provided URL.
+                  StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                          new Response.Listener<String>() {
+                              @Override
+                              public void onResponse(String response) {
+                                  try {
+                                      JSONObject jsonObj = new JSONObject(response);
+
+                                      boolean error = jsonObj.getBoolean("error");
+                                      if (!error) {
+                                          String ok;
+                                          ok = jsonObj.getString("ok");
+                                          //Redirect to LoginActivity
+                                          Toast toast = Toast.makeText(FormActivity.this, ok, Toast.LENGTH_LONG);
+                                               toast.show();
+                                          Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+                                                startActivity(intent);
+                                      } else {
+                                          String errorMessage;
+                                          errorMessage = jsonObj.getString("error_msg");
+                                          Toast toast = Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG);
+                                             toast.show();
+                                      }
+
+
+                                  } catch (JSONException e) {
+                                      e.printStackTrace();
                                   }
 
-                                  else{
-                                      String errorMessage;
-                                      errorMessage = jsonObj.getString("error_msg");
-                                      Toast toast = Toast.makeText(getApplicationContext(),errorMessage,Toast.LENGTH_LONG);
 
-                                  }
-
-
-                              } catch (JSONException e) {
-                                  e.printStackTrace();
                               }
+                          }, new Response.ErrorListener() {
+                      @Override
+                      public void onErrorResponse(VolleyError error) {
+                          //mTextView.setText("That didn't work!");
+                          Log.e("ERROR", "cANNOT SAVE USER");
+                          Toast toast = Toast.makeText(getApplicationContext(), "Lomakkeen talennus ei onnistunut:" + error.getMessage(), Toast.LENGTH_LONG);
+                          error.printStackTrace();
+
+                      }
+                  })
+
+                  {
+
+                      @Override
+                      protected Map<String, String> getParams() {
+                          Map<String, String> params = new HashMap<String, String>();
+                          params.put("task", tehtava);
+                          params.put("email", mEmail);
+                          return params;
+                      }
+
+                  };
+
+                  AppController.getInstance(this).addToRequestQueue(stringRequest);
 
 
-                          }
-                      }, new Response.ErrorListener() {
-                  @Override
-                  public void onErrorResponse(VolleyError error) {
-                      //mTextView.setText("That didn't work!");
-                      Log.e("ERROR", "cANNOT SAVE USER");
-                      Toast toast = Toast.makeText(getApplicationContext(),"Rekisteröinti ei onnistunut:"+error.getMessage(),Toast.LENGTH_LONG);
-                      error.printStackTrace();
-
-                  }
-              } )
-
-              {
-
-                  @Override
-                  protected Map<String,String> getParams(){
-                      Map<String,String> params = new HashMap<String, String>();
-                      DateFormat df = DateFormat.getDateInstance();
-                      params.put("tehtava", tehtava);
-                      params.put("email", mEmail);
-                      return params;
-                  }
-
-              };
-
-              AppController.getInstance().addToRequestQueue(stringRequest);
-
-
-          }
-
+              }
 
 
           }
-      }
+         }
+     }
 
 
 

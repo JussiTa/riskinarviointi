@@ -3,6 +3,7 @@ package com.example.jussi.tyokohtainenriskinarviointi.com.example.jussi.tyokohta
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.jussi.tyokohtainenriskinarviointi.LoginActivity;
 
@@ -28,9 +29,9 @@ public class SessionManager {
     private String IS_LOGGEDIN ="IsLoggedIn";
     //User name and email keys must be public outside access
 
-    public static String KEY_NAME= "user";
-
+    public static String KEY_PASS= "psw";
     public static String KEY_EMAIL ="email";
+
 
 
     public SessionManager(Context context){
@@ -42,20 +43,19 @@ public class SessionManager {
         editor = pref.edit();
     }
 
-    public void createLoginSession(String name, String email){
+    public void createLoginSession(String email,String psw){
 
         editor.putBoolean(IS_LOGGEDIN,true);
-        editor.putString(KEY_NAME,name);
         editor.putString(KEY_EMAIL,email);
+        editor.putString(KEY_PASS,psw);
         editor.commit();
 
     }
 
-
     public HashMap<String,String> getUserDetails() {
         HashMap<String,String> user =new HashMap<String, String>();
 
-        user.put(KEY_NAME,pref.getString(KEY_NAME,null));
+        user.put(KEY_PASS,pref.getString(KEY_PASS,null));
         user.put(KEY_EMAIL,pref.getString(KEY_EMAIL,null));
 
         return user;
@@ -80,8 +80,46 @@ public class SessionManager {
     }
 
     public boolean IsLogin() {
+        Log.d("KEYVALUE",pref.getString(KEY_EMAIL,null));
+       // return pref.getBoolean(PREF_NAME,false);
+        if(pref.getString(KEY_PASS,null)!= null&& pref.getString(KEY_EMAIL,null)!=null)
 
-        return pref.getBoolean(PREF_NAME,false);
+
+
+          return true;
+
+        return false;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
 
